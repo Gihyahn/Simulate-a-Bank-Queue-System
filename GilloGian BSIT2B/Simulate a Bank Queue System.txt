@@ -1,0 +1,87 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+class Customer {
+    private static int idCounter = 1;
+    private int number;
+    private String name;
+
+    public Customer(String name) {
+        this.name = name;
+        this.number = idCounter++;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class CustomerQueueManager {
+    private static Queue<Customer> queue = new LinkedList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\nMenu:");
+            System.out.println("1. Add Customer");
+            System.out.println("2. Serve Customer");
+            System.out.println("3. Exit");
+            System.out.print("Enter choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+
+            switch(choice) {
+                case 1:
+                    System.out.print("Enter customer name: ");
+                    String name = scanner.nextLine();
+                    addCustomer(name);
+                    break;
+                case 2:
+                    serveCustomer();
+                    break;
+                case 3:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Try again.");
+            }
+            displayQueue();
+        } while(choice != 3);
+
+        scanner.close();
+    }
+
+    private static void addCustomer(String name) {
+        Customer customer = new Customer(name);
+        queue.add(customer);
+        System.out.println("Added customer: " + customer.getName() + " (Number " + customer.getNumber() + ")");
+    }
+
+    private static void serveCustomer() {
+        if (queue.isEmpty()) {
+            System.out.println("No customers to serve.");
+        } else {
+            Customer served = queue.poll();
+            System.out.println("Serving customer: " + served.getName() + " (Number " + served.getNumber() + ")");
+        }
+    }
+
+    private static void displayQueue() {
+        if (queue.isEmpty()) {
+            System.out.println("Current queue: [Empty]");
+        } else {
+            System.out.print("Current queue: ");
+            for (Customer c : queue) {
+                System.out.print(c.getName() + "(" + c.getNumber() + ") ");
+            }
+            System.out.println();
+        }
+    }
+}
